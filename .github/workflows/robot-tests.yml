@@ -15,7 +15,8 @@ jobs:
     steps:
       # Checkout do código do repositório
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        
 
       # Configuração do Python
       - name: Set up Python
@@ -39,7 +40,7 @@ jobs:
 
       # Upload dos relatórios gerados
       - name: Upload Robot Framework Reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: robot-reports
           path: |
