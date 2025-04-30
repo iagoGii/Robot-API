@@ -16,7 +16,6 @@ jobs:
       # Checkout do código do repositório
       - name: Checkout Code
         uses: actions/checkout@v3
-        
 
       # Configuração do Python
       - name: Set up Python
@@ -27,20 +26,20 @@ jobs:
       # Instalação das dependências
       - name: Install Dependencies
         run: |
-          pip install robotframework robotframework-requests
+          pip install robotframework robotframework-requests robotframework-reporter
 
-      # Execução dos testes
+      # Execução dos testes com relatório no console
       - name: Run Robot Framework Tests
         run: |
-          robot ./Test/API_Serverest.robot
+          robot --loglevel DEBUG ./Test/API_Serverest.robot
 
       # Debugging step to verify test reports
       - name: Debug Test Reports
-        run: ls -al
+        run: ls -al ./Test
 
       # Upload dos relatórios gerados
       - name: Upload Robot Framework Reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v2
         with:
           name: robot-reports
           path: |
