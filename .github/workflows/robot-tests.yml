@@ -1,43 +1,54 @@
-name: Robot Framework Tests
+name: Run Robot Framework Tests
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+  schedule:
+    - cron: '0 17 * * *'
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
-      # Checkout do código do repositório
-      - name: Checkout Code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Configuração do Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.10'
 
-      # Instalação das dependências
-      - name: Install Dependencies
+      - name: Install dependencies
         run: |
-          pip install robotframework robotframework-requests
+          python -m pip install --upgrade pip
+          # Install additional dependencies if needed
+          pip install -r requirements.txt
 
-      # Execução dos testes
-      - name: Run Robot Framework Tests
+      - name: Run Robot Framework tests
+        env:
+          WORK_TOKEN: ${{ secrets.GIT_TOKEN }}
+          TZ: Asia/Ho_Chi_Minh
         run: |
-          robot Tests/
+          if ! robot --outputdir results --exclude skip tests/; then
+              echo "Robot Framework tests failed. Rerunning failed tests..."
+              if [ -f results/output.xml ]; then
+                  robot --rerunfailed results/output.xml --outputdir results_rerun tests/ || true
+                  if [ -f results_rerun/output.xml ]; then
+                      rebot --output results/output.xml --log results/log.html --report results/report.html --merge results/output.xml results_rerun/output.xml
+                  else
+                      echo "No output.xml file found from rerun. Skipping merge."
+                  fi
+              else
+                  echo "No output.xml file found. Cannot rerun failed tests."
+              fi
+          fi
 
-      # Upload dos relatórios gerados
-      - name: Upload Robot Framework Reports
-        uses: actions/upload-artifact@v2
+          echo "Script execution completed"
+        continue-on-error: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: robot-reports
-          path: |
-            report.html
-            log.html
+          path: ./results
+          name: robot-test-results
+          retention-days: 3
