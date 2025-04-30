@@ -33,6 +33,10 @@ jobs:
         run: |
           robot Tests/
 
+      # Debugging step to verify test reports
+      - name: Debug Test Reports
+        run: ls -al
+
       # Upload dos relatórios gerados
       - name: Upload Robot Framework Reports
         uses: actions/upload-artifact@v3
