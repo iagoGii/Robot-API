@@ -1,0 +1,43 @@
+name: Robot Framework Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout do código do repositório
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Configuração do Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Instalação das dependências
+      - name: Install Dependencies
+        run: |
+          pip install robotframework robotframework-requests
+
+      # Execução dos testes
+      - name: Run Robot Framework Tests
+        run: |
+          robot Tests/
+
+      # Upload dos relatórios gerados
+      - name: Upload Robot Framework Reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: robot-reports
+          path: |
+            report.html
+            log.html
