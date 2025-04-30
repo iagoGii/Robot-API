@@ -32,7 +32,7 @@ jobs:
       # Execução dos testes
       - name: Run Robot Framework Tests
         run: |
-          robot Tests/
+          robot ./Test/API_Serverest.robot
 
       # Debugging step to verify test reports
       - name: Debug Test Reports
