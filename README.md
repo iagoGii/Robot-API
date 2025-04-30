@@ -75,16 +75,6 @@ robot Tests/carrinhos_tests.robot
 - Uso de keywords reutilizáveis.
 - Organização modular em pastas por contexto (recursos, testes, dados).
 
-### Validações
-
-- Verificação do *status code* esperado.
-- Validação de mensagens de sucesso no corpo da resposta.
-
-### Boas Práticas
-
-- Uso de *keywords* reutilizáveis.
-- Estrutura organizada em pastas.
-
 ---
 
 ## ⚙️ Como os Testes Foram Construídos
