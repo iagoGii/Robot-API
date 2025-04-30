@@ -15,7 +15,7 @@ jobs:
     steps:
       # Checkout do código do repositório
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         
 
       # Configuração do Python
